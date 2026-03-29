@@ -1003,7 +1003,7 @@ const textReports = `45 47 48 50 51 52 54 51
 // Reports are considered safe if they meet the following criteria:
 // The levels are either all increasing or all decreasing.
 // Any two adjacent levels differ by at least one and at most three.
-const formatedReports = textReports
+const formattedReports = textReports
   .trim()
   .split("\n")
   .map((line) => line.trim().split(/\s+/).map(Number));
@@ -1041,7 +1041,7 @@ const filterReportsPart1 = (reports) => {
   return filteredReports;
 };
 
-const safeReports = filterReportsPart1(formatedReports);
+const safeReports = filterReportsPart1(formattedReports);
 console.log("safeReports", safeReports.length);
 
 // Part 2
@@ -1066,5 +1066,5 @@ const filterReportsPart2 = (reports) => {
   return filteredReports;
 };
 
-const safeReportsPart2 = filterReportsPart2(formatedReports);
+const safeReportsPart2 = filterReportsPart2(formattedReports);
 console.log("safeReportsPart2", safeReportsPart2.length);

@@ -999,71 +999,73 @@ const textReports = `45 47 48 50 51 52 54 51
 72 73 75 77 78 80 81
 73 72 71 70 68 66`;
 
-// Part 1
-// Reports are considered safe if they meet the following criteria:
-// The levels are either all increasing or all decreasing.
-// Any two adjacent levels differ by at least one and at most three.
 const formattedReports = textReports
   .trim()
   .split("\n")
   .map((line) => line.trim().split(/\s+/).map(Number));
 
+const isSafeReport = (levels) => {
+  if (levels.length < 2) {
+    return true;
+  }
+
+  let direction = null; // "increasing" or "decreasing"
+
+  for (let index = 1; index < levels.length; index++) {
+    const diff = levels[index] - levels[index - 1];
+    const absDiff = Math.abs(diff);
+
+    // Adjacent levels must differ by 1, 2, or 3
+    if (diff === 0 || absDiff > 3) {
+      return false;
+    }
+
+    // Set direction from the first valid difference
+    if (direction === null) {
+      direction = diff > 0 ? "increasing" : "decreasing";
+      continue;
+    }
+
+    // Direction must stay consistent
+    if (direction === "increasing" && diff < 0) {
+      return false;
+    }
+
+    if (direction === "decreasing" && diff > 0) {
+      return false;
+    }
+  }
+
+  return true;
+};
+
 const filterReportsPart1 = (reports) => {
-  const filteredReports = reports.filter((levels) => {
-    let differences = [];
-    let trends = [];
-
-    levels.forEach((level, index) => {
-      // Any two adjacent level differ by at least one and at most three.
-      if (index + 1 < levels.length) {
-        const difference = Math.abs(level - levels[index + 1]);
-        differences.push(difference > 0 && difference <= 3 ? "safe" : "unsafe");
-
-        // The level are either all increasing or all decreasing.
-        trends.push(
-          level > levels[index + 1]
-            ? "decreasing"
-            : level < levels[index + 1]
-              ? "increasing"
-              : "stable",
-        );
-      }
-    });
-
-    const safeDifferences = differences.every((diff) => diff === "safe");
-    const safeTrends =
-      trends.every((direction) => direction === "increasing") ||
-      trends.every((direction) => direction === "decreasing");
-
-    return safeDifferences && safeTrends;
-  });
-
-  return filteredReports;
+  return reports.filter(isSafeReport);
 };
 
 const safeReports = filterReportsPart1(formattedReports);
 console.log("safeReports", safeReports.length);
 
-// Part 2
-// Reports are considered safe if they are already safe from Part 1
-// OR if removing one number makes them safe.
-const filterReportsPart2 = (reports) => {
-  const filteredReports = reports.filter((levels) => {
-    // Check if the report is already safe
-    if (filterReportsPart1([levels]).length > 0) {
-      return true;
-    } else {
-      // If not, check if removing one number can make it safe
-      for (let i = 0; i < levels.length; i++) {
-        const modifiedLevels = [...levels.slice(0, i), ...levels.slice(i + 1)];
-        if (filterReportsPart1([modifiedLevels]).length > 0) {
-          return true;
-        }
-      }
-    }
-  });
+const isSafeWithDampener = (levels) => {
+  // Already safe without removing anything
+  if (isSafeReport(levels)) {
+    return true;
+  }
 
-  return filteredReports;
+  // Try removing one level at a time
+  for (let i = 0; i < levels.length; i++) {
+    const modifiedLevels = [...levels.slice(0, i), ...levels.slice(i + 1)];
+
+    if (isSafeReport(modifiedLevels)) {
+      return true;
+    }
+  }
+
+  return false;
+};
+
+const filterReportsPart2 = (reports) => {
+  return reports.filter(isSafeWithDampener);
 };
 
 const safeReportsPart2 = filterReportsPart2(formattedReports);

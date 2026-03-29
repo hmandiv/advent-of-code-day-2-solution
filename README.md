@@ -4,35 +4,33 @@ This repository contains my solution for Advent of Code 2024 Day 2.
 
 ## Problem Summary
 
-Each line represents a report consisting of levels (numbers). A report is considered **safe** if:
+Each line represents a report containing a sequence of levels.
 
-- The levels are either strictly increasing or strictly decreasing
-- The difference between adjacent levels is between 1 and 3 (inclusive)
+A report is considered **safe** if:
 
-### Part 2 (Problem Dampener)
+- the levels are either all increasing or all decreasing
+- the difference between each pair of adjacent levels is between 1 and 3 inclusive
 
-A report is also considered safe if removing **one level** makes it valid according to the above rules.
+### Part 2 – Problem Dampener
 
----
+A report is also considered safe if it is already valid, or if removing exactly one level makes it valid.
 
 ## Approach
 
 ### Part 1
-- Parse input into arrays of numbers
-- Iterate through each report
-- Check:
-  - consistent direction (increasing or decreasing)
-  - valid differences between adjacent values
-- Count valid reports
+- Parse the input into arrays of numbers
+- For each report, examine adjacent pairs
+- Track:
+  - whether each difference is valid
+  - whether the overall trend is increasing or decreasing
+- Count reports where all differences are valid and the trend is consistent
 
 ### Part 2
-- For each report:
-  - First check if it is already safe
-  - If not, remove one level at a time
-  - Re-check using the same validation logic
+- Reuse the Part 1 validation logic
+- First check whether a report is already safe
+- If not, create modified versions of the report by removing one level at a time
+- Re-check each modified report using the same Part 1 logic
 - Count reports that become safe after removing one level
-
----
 
 ## How to Run
 

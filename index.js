@@ -1045,9 +1045,8 @@ const safeReports = filterReportsPart1(formatedReports);
 console.log("safeReports", safeReports.length);
 
 // Part 2
-// Reports are considered safe if they meet the following criteria:
-// Already safe from part 1, and
-// One can remove ONE number from the levels and it becomes safe.
+// Reports are considered safe if they are already safe from Part 1
+// OR if removing one number makes them safe.
 const filterReportsPart2 = (reports) => {
   const filteredReports = reports.filter((levels) => {
     // Check if the report is already safe
